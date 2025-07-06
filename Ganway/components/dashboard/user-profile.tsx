@@ -12,7 +12,7 @@ import Swal from "sweetalert2" // Import SweetAlert2
 export function UserProfile() {
   const { user } = useAuth() // Get current logged-in user
   const { posts, toggleLike, deletePost } = usePostStore() // Get posts and actions from store
-  const { items: cartItems } = useCartStore() // Get cart items for "Mis compras"
+  const { items: cartItems, purchases } = useCartStore() // Get cart items and purchases for 'Mis compras'
   const [activeTab, setActiveTab] = useState("creations")
   const [isNewPublicationModalOpen, setIsNewPublicationModalOpen] = useState(false)
 
@@ -253,11 +253,11 @@ export function UserProfile() {
         {activeTab === "my-purchases" && (
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
             <h3 className="text-xl font-bold text-gray-900 mb-4">Mis Compras Recientes</h3>
-            {cartItems.length === 0 ? (
+            {purchases.length === 0 ? (
               <div className="text-center text-gray-600 py-10">Aún no has realizado ninguna compra.</div>
             ) : (
               <div className="space-y-4">
-                {cartItems.map((item) => (
+                {purchases.map((item) => (
                   <div
                     key={item.id}
                     className="flex items-center space-x-4 border-b border-gray-100 pb-4 last:border-b-0 last:pb-0"

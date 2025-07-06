@@ -9,37 +9,43 @@ export function FashionFeed() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      {/* Category Tabs */}
-      <div className="flex items-center space-x-6 mb-8 overflow-x-auto">
-        <div className="flex items-center space-x-2 bg-gray-100 rounded-full px-4 py-2 whitespace-nowrap">
-          <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
-            <span className="text-white text-xs font-medium">CF</span>
+      {/* Categorías visuales tipo Figma */}
+      <div className="flex flex-wrap justify-center gap-8 mb-8">
+        <div className="flex flex-col items-center">
+          <div className="w-12 h-12 rounded-lg overflow-hidden mb-1">
+            <Image src="/images/dashboard/colorful-avant-garde.jpg" alt="Arte Abstracto" width={48} height={48} className="object-cover w-full h-full" />
           </div>
-          <span className="text-sm font-medium text-gray-900">Consejos Personales</span>
+          <span className="text-xs font-medium text-gray-900">Arte Abstracto</span>
         </div>
-        <div className="flex items-center space-x-2 bg-gray-100 rounded-full px-4 py-2 whitespace-nowrap">
-          <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-            <span className="text-white text-xs font-medium">PR</span>
+        <div className="flex flex-col items-center">
+          <div className="w-12 h-12 rounded-lg overflow-hidden mb-1">
+            <Image src="/images/dashboard/blue-denim-urban.jpg" alt="Denim Urbano" width={48} height={48} className="object-cover w-full h-full" />
           </div>
-          <span className="text-sm font-medium text-gray-900">Piezas Recomendadas</span>
+          <span className="text-xs font-medium text-gray-900">Denim Urbano</span>
         </div>
-        <div className="flex items-center space-x-2 bg-gray-100 rounded-full px-4 py-2 whitespace-nowrap">
-          <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-            <span className="text-white text-xs font-medium">ER</span>
+        <div className="flex flex-col items-center">
+          <div className="w-12 h-12 rounded-lg overflow-hidden mb-1">
+            <Image src="/images/dashboard/beige-elegant-blazer.jpg" alt="Blazer Elegante" width={48} height={48} className="object-cover w-full h-full" />
           </div>
-          <span className="text-sm font-medium text-gray-900">Estilos Recomendados</span>
+          <span className="text-xs font-medium text-gray-900">Blazer Elegante</span>
         </div>
-        <div className="flex items-center space-x-2 bg-gray-100 rounded-full px-4 py-2 whitespace-nowrap">
-          <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
-            <span className="text-white text-xs font-medium">TM</span>
+        <div className="flex flex-col items-center">
+          <div className="w-12 h-12 rounded-lg overflow-hidden mb-1">
+            <Image src="/images/dashboard/yellow-gingham-skirt-white-top.jpg" alt="Verano" width={48} height={48} className="object-cover w-full h-full" />
           </div>
-          <span className="text-sm font-medium text-gray-900">Tendencias Modernas</span>
+          <span className="text-xs font-medium text-gray-900">Verano</span>
         </div>
-        <div className="flex items-center space-x-2 bg-gray-100 rounded-full px-4 py-2 whitespace-nowrap">
-          <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
-            <span className="text-white text-xs font-medium">OM</span>
+        <div className="flex flex-col items-center">
+          <div className="w-12 h-12 rounded-lg overflow-hidden mb-1">
+            <Image src="/images/dashboard/black-grunge-style.jpg" alt="Grunge" width={48} height={48} className="object-cover w-full h-full" />
           </div>
-          <span className="text-sm font-medium text-gray-900">Outfits Masculinos</span>
+          <span className="text-xs font-medium text-gray-900">Grunge</span>
+        </div>
+        <div className="flex flex-col items-center">
+          <div className="w-12 h-12 rounded-lg overflow-hidden mb-1">
+            <Image src="/images/dashboard/grey-night-jumpsuit.jpg" alt="Nocturno" width={48} height={48} className="object-cover w-full h-full" />
+          </div>
+          <span className="text-xs font-medium text-gray-900">Nocturno</span>
         </div>
       </div>
 

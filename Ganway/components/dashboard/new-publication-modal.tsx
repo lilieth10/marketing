@@ -14,6 +14,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { X, Upload, Tag, Sparkles } from "lucide-react"
 import { usePostStore } from "@/store/postStore"
+import Swal from "sweetalert2"
+import { useAuth } from "@/hooks/useAuth"
 
 interface NewPublicationModalProps {
   isOpen: boolean
@@ -22,6 +24,7 @@ interface NewPublicationModalProps {
 
 export function NewPublicationModal({ isOpen, onClose }: NewPublicationModalProps) {
   const { addPost } = usePostStore()
+  const { user } = useAuth()
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -35,15 +38,28 @@ export function NewPublicationModal({ isOpen, onClose }: NewPublicationModalProp
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
+    // Depuración: mostrar el valor de la imagen
+    console.log('Valor de imagen:', formData.image)
+
     if (!formData.title || !formData.description || !formData.image) {
-      if (typeof window !== "undefined" && window.Swal) {
-        window.Swal.fire({
-          icon: "warning",
-          title: "Campos requeridos",
-          text: "Por favor, completa todos los campos obligatorios.",
-          confirmButtonColor: "#8B5CF6",
+      let errorMsg = "Por favor, completa todos los campos obligatorios."
+      if (!formData.image) errorMsg = "Debes subir una imagen válida."
+      Swal.fire({
+        icon: "warning",
+        title: "Campos requeridos",
+        text: errorMsg,
+        confirmButtonColor: "#8B5CF6",
+      }).then(() => {
+        setFormData({
+          title: "",
+          description: "",
+          image: "",
+          category: "",
+          tags: [],
         })
-      }
+        setCurrentTag("")
+        onClose()
+      })
       return
     }
 
@@ -59,27 +75,23 @@ export function NewPublicationModal({ isOpen, onClose }: NewPublicationModalProp
         description: formData.description,
         image: formData.image,
         user: {
-          id: "current-user",
-          name: "Alexia Rivera",
-          username: "@alexiarivera",
-          avatar: "/images/dashboard/user-alexia.jpg",
-          followers: 1200,
-          following: 850,
+          name: user?.name || "Alexia Rivera",
+          username: user?.email || "@alexiarivera",
+          avatar: user?.avatar || "/images/dashboard/user-alexia.jpg",
         },
         category: formData.category,
-        tags: formData.tags,
+        height: 400,
+        userId: user?.id || "1",
       })
 
-      if (typeof window !== "undefined" && window.Swal) {
-        window.Swal.fire({
-          icon: "success",
-          title: "¡Publicación creada!",
-          text: "Tu publicación ha sido añadida al feed exitosamente.",
-          confirmButtonColor: "#8B5CF6",
-          timer: 3000,
-          showConfirmButton: false,
-        })
-      }
+      Swal.fire({
+        icon: "success",
+        title: "¡Publicación creada!",
+        text: "Tu publicación ha sido añadida al feed exitosamente.",
+        confirmButtonColor: "#8B5CF6",
+        timer: 3000,
+        showConfirmButton: false,
+      })
 
       // Reset form
       setFormData({
@@ -92,14 +104,22 @@ export function NewPublicationModal({ isOpen, onClose }: NewPublicationModalProp
       setCurrentTag("")
       onClose()
     } catch (error) {
-      if (typeof window !== "undefined" && window.Swal) {
-        window.Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Hubo un problema al crear la publicación. Inténtalo de nuevo.",
-          confirmButtonColor: "#8B5CF6",
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Hubo un problema al crear la publicación. Inténtalo de nuevo.",
+        confirmButtonColor: "#8B5CF6",
+      }).then(() => {
+        setFormData({
+          title: "",
+          description: "",
+          image: "",
+          category: "",
+          tags: [],
         })
-      }
+        setCurrentTag("")
+        onClose()
+      })
     } finally {
       setIsSubmitting(false)
     }
@@ -129,9 +149,21 @@ export function NewPublicationModal({ isOpen, onClose }: NewPublicationModalProp
     }
   }
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setFormData((prev) => ({ ...prev, image: reader.result as string }))
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" aria-describedby="new-publication-description">
+        <span id="new-publication-description" className="sr-only">Formulario para crear una nueva publicación. Todos los campos marcados con * son obligatorios.</span>
         <DialogHeader>
           <DialogTitle className="flex items-center text-2xl font-bold text-gray-900">
             <Sparkles className="w-6 h-6 mr-2 text-purple-600" />
@@ -189,25 +221,18 @@ export function NewPublicationModal({ isOpen, onClose }: NewPublicationModalProp
             <p className="text-xs text-gray-500">{formData.description.length}/500 caracteres</p>
           </div>
 
-          {/* Image URL */}
+          {/* Image Upload */}
           <div className="space-y-2">
-            <Label htmlFor="image" className="text-sm font-medium text-gray-700">
-              URL de la imagen/Miniatura *
+            <Label htmlFor="image-upload" className="text-sm font-medium text-gray-700">
+              Imagen *
             </Label>
-            <div className="flex space-x-2">
-              <div className="flex-1">
-                <Input
-                  id="image"
-                  placeholder="https://ejemplo.com/imagen.jpg"
-                  value={formData.image}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, image: e.target.value }))}
-                  className="w-full"
-                />
-              </div>
-              <Button type="button" variant="outline" size="icon">
-                <Upload className="w-4 h-4" />
-              </Button>
-            </div>
+            <Input
+              id="image-upload"
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="w-full"
+            />
           </div>
 
           {/* Category */}

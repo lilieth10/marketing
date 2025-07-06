@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button"
 import { Trash2, Plus, Minus, ChevronLeft } from "lucide-react"
 import { useCartStore } from "@/store/cartStore" // Import useCartStore
 import Swal from "sweetalert2" // Import SweetAlert2
+import { useRouter } from "next/navigation"
 
 export function CartSummary() {
-  const { items: cartItems, updateQuantity, removeItem, clearCart } = useCartStore() // Use cart store
+  const { items: cartItems, updateQuantity, removeItem, clearCart, checkout } = useCartStore() // Use cart store
+  const router = useRouter()
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const shipping = 0 // As per Figma
@@ -135,7 +137,28 @@ export function CartSummary() {
                 <span>${total.toFixed(2)}</span>
               </div>
             </div>
-            <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 text-lg font-semibold rounded-lg">
+            <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 text-lg font-semibold rounded-lg"
+              onClick={async () => {
+                if (cartItems.length === 0) return
+                try {
+                  checkout()
+                  await Swal.fire({
+                    icon: "success",
+                    title: "Pago exitoso",
+                    text: "Tu compra se ha realizado correctamente.",
+                    confirmButtonColor: "#8B5CF6",
+                  })
+                  router.push("/dashboard/client/profile?tab=my-purchases")
+                } catch (e) {
+                  Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Hubo un problema al procesar la compra. Intenta de nuevo.",
+                    confirmButtonColor: "#8B5CF6",
+                  })
+                }
+              }}
+            >
               Finalizar pedido
             </Button>
             <Button variant="ghost" className="w-full mt-4 text-purple-600 hover:text-purple-700 text-sm font-medium">

@@ -30,13 +30,19 @@ export default function Header() {
           </nav>
           {/* Auth Buttons */}
           <div className="flex items-center space-x-4">
-            <Button
-              variant="outline"
-              className="text-gray-700 border-gray-300 hover:border-purple-600 hover:text-purple-600 bg-transparent"
-            >
-              Iniciar sesión
-            </Button>
-            <Button className="bg-purple-600 hover:bg-purple-700 text-white px-6 rounded-lg">Registrarse</Button>
+            <Link href="/auth/login">
+              <Button
+                variant="outline"
+                className="text-gray-700 border-gray-300 hover:border-purple-600 hover:text-purple-600 bg-transparent"
+              >
+                Iniciar sesión
+              </Button>
+            </Link>
+            <Link href="/auth/register">
+              <Button className="bg-purple-600 hover:bg-purple-700 text-white px-6 rounded-lg">
+                Registrarse
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
