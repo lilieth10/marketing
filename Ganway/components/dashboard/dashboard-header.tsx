@@ -53,13 +53,13 @@ export function DashboardHeader() {
               Comunidad
             </Link>
             <Link
-              href="/dashboard/client/articles/a1"
+              href="/dashboard/client/blog"
               className="text-gray-600 hover:text-gray-900 font-medium transition-colors text-sm lg:text-base"
             >
               Blog
             </Link>
             <Link
-              href="#"
+              href="/dashboard/client/events"
               className="text-gray-600 hover:text-gray-900 font-medium transition-colors text-sm lg:text-base"
             >
               Eventos
@@ -191,14 +191,14 @@ export function DashboardHeader() {
                 Comunidad
               </Link>
               <Link
-                href="/dashboard/client/articles/a1"
+                href="/dashboard/client/blog"
                 className="block px-4 py-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50 font-medium transition-colors rounded-lg mx-2"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Blog
               </Link>
               <Link
-                href="#"
+                href="/dashboard/client/events"
                 className="block px-4 py-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50 font-medium transition-colors rounded-lg mx-2"
                 onClick={() => setIsMobileMenuOpen(false)}
               >

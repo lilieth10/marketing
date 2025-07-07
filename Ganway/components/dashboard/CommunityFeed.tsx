@@ -2,6 +2,7 @@
 
 import { useState, ChangeEvent, useRef } from "react"
 import { useAuthStore } from "@/store/authStore"
+import FashionCommunity from "./FashionCommunity"
 
 const communities = [
   {
@@ -167,6 +168,7 @@ const CommunityFeed = () => {
   const [imageFile, setImageFile] = useState<string | null>(null)
   const [postType, setPostType] = useState<"foto" | "video" | "evento" | "articulo">("foto")
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [selectedCommunity, setSelectedCommunity] = useState<string | null>(null)
 
   // Manejar selección de imagen
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -309,6 +311,7 @@ const CommunityFeed = () => {
             <div
               key={c.name}
               className="flex items-start gap-3 p-4 rounded-lg hover:bg-gray-50 cursor-pointer border border-gray-100"
+              onClick={() => setSelectedCommunity(c.name)}
             >
               <img src={c.avatar || "/placeholder.svg"} alt={c.name} className="w-14 h-14 rounded-full object-cover mt-1" />
               <div className="flex-1 min-w-0">
@@ -348,9 +351,22 @@ const CommunityFeed = () => {
           <div className="w-6 h-6"></div>
         </div>
 
-        {/* Feed Container - Ahora ocupa todo el espacio disponible */}
-        <div className="flex-1 flex justify-center items-start w-full">
+        {/* Renderizado condicional: si hay comunidad seleccionada, mostrar FashionCommunity, si no, el feed general */}
+        {selectedCommunity ? (
           <div className="w-full px-4 py-4 sm:py-6 lg:py-8">
+            {/* Botón para volver */}
+            <button
+              className="mb-4 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full text-sm font-medium text-gray-700 border border-gray-200"
+              onClick={() => setSelectedCommunity(null)}
+            >
+              ← Volver al feed
+            </button>
+            <div className="w-full">
+              <FashionCommunity />
+            </div>
+          </div>
+        ) : (
+          <div className="flex-1 flex flex-col min-h-screen w-full px-4 py-4 sm:py-6 lg:py-8 lg:ml-36">
             {/* Crear nuevo post */}
             <aside className="bg-white rounded-xl shadow-sm border border-gray-200 mb-6">
               <div className="flex flex-col gap-2 p-4 pb-2">
@@ -589,7 +605,7 @@ const CommunityFeed = () => {
               ))}
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   )
