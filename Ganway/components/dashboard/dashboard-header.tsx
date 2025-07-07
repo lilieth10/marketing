@@ -11,10 +11,12 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu" // Import DropdownMenu components
 import { useAuth } from "@/hooks/useAuth" // Import useAuth to get logout function
+import { useRouter } from "next/navigation"
 
 export function DashboardHeader() {
   const { items: cartItems } = useCartStore()
   const { logout } = useAuth() // Get logout function from useAuth hook
+  const router = useRouter()
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-gray-100">
@@ -98,7 +100,7 @@ export function DashboardHeader() {
                 <DropdownMenuItem asChild>
                   <Link href="/dashboard/client/profile">Mis datos</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>Configuración</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push("/dashboard/client/settings")}>Configuración</DropdownMenuItem>
                 <DropdownMenuItem>Ayuda</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => logout()}>Cerrar sesión</DropdownMenuItem>

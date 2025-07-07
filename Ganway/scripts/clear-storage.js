@@ -1,5 +1,8 @@
-// Script para limpiar el localStorage y forzar la recarga de datos
-if (typeof window !== "undefined") {
-  localStorage.removeItem("post-storage")
-  console.log("Storage cleared! Please refresh the page.")
-}
+// Script para limpiar localStorage y resetear datos de autenticación
+console.log("Limpiando localStorage...")
+
+// Limpiar datos de autenticación
+localStorage.removeItem("auth-storage")
+localStorage.removeItem("users_db")
+
+console.log("localStorage limpiado. Recarga la página para ver los cambios.")

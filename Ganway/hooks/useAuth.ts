@@ -28,8 +28,8 @@ export function useAuth() {
 
   const handleRegister = async (userData: any) => {
     const success = await register(userData)
-    if (success && user) {
-      redirectToDashboard(user.role)
+    if (success) {
+      redirectToDashboard(userData.role)
     }
     return success
   }

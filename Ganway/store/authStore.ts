@@ -7,8 +7,11 @@ export interface User {
   email: string
   role: "admin" | "designer" | "client"
   avatar?: string
+  cover?: string
   createdAt: string
   isActive: boolean
+  bio?: string
+  website?: string
 }
 
 interface AuthState {
@@ -33,8 +36,11 @@ const mockUsers: User[] = [
     email: "admin@mock.com",
     role: "admin",
     avatar: "/placeholder.svg?height=40&width=40",
+    cover: "/placeholder.svg?height=120&width=120",
     createdAt: new Date().toISOString(),
     isActive: true,
+    bio: "Administrador de la plataforma.",
+    website: "www.admin.com",
   },
   {
     id: "2",
@@ -42,10 +48,37 @@ const mockUsers: User[] = [
     email: "designer@mock.com",
     role: "designer",
     avatar: "/placeholder.svg?height=40&width=40",
+    cover: "/placeholder.svg?height=120&width=120",
     createdAt: new Date().toISOString(),
     isActive: true,
+    bio: "Diseñador de moda.",
+    website: "www.designer.com",
   },
 ]
+
+// Añadir helpers para persistir usuarios en localStorage
+function getStoredUsers(): User[] {
+  if (typeof window === "undefined") return mockUsers
+  const stored = localStorage.getItem("users_db")
+  if (stored) {
+    try {
+      return JSON.parse(stored)
+    } catch {
+      return mockUsers
+    }
+  }
+  return mockUsers
+}
+
+function saveUsers(users: User[]) {
+  if (typeof window !== "undefined") {
+    try {
+      localStorage.setItem("users_db", JSON.stringify(users))
+    } catch (error) {
+      console.error("Error guardando usuarios:", error)
+    }
+  }
+}
 
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -62,16 +95,16 @@ export const useAuthStore = create<AuthState>()(
           // Simulate API delay
           await new Promise((resolve) => setTimeout(resolve, 1000))
 
-          // Find user in mock database
-          const user = mockUsers.find((u) => u.email === email && u.isActive)
+          const users = getStoredUsers()
+          const user = users.find((u) => u.email === email)
 
           if (!user) {
-            set({ error: "Usuario no encontrado o inactivo", isLoading: false })
+            set({ error: "Usuario no encontrado. Regístrate primero.", isLoading: false })
             return false
           }
 
-          // In real app, verify password hash
-          // For mock, any password works
+          // En la app real, aquí se verifica el password
+          // En el mock, cualquier password funciona
 
           set({
             user,
@@ -97,10 +130,10 @@ export const useAuthStore = create<AuthState>()(
           // Simulate API delay
           await new Promise((resolve) => setTimeout(resolve, 1200))
 
-          // Check if email already exists
-          const existingUser = mockUsers.find((u) => u.email === userData.email)
+          let users = getStoredUsers()
+          const existingUser = users.find((u) => u.email === userData.email)
           if (existingUser) {
-            set({ error: "Este email ya está registrado", isLoading: false })
+            set({ error: "Este email ya está registrado. Inicia sesión con tu cuenta.", isLoading: false })
             return false
           }
 
@@ -110,10 +143,13 @@ export const useAuthStore = create<AuthState>()(
             id: `user_${Date.now()}`,
             createdAt: new Date().toISOString(),
             isActive: true,
+            avatar: userData.avatar || "/placeholder.svg?height=40&width=40",
+            cover: userData.cover || "/placeholder.svg?height=120&width=120",
           }
 
           // Add to mock database (in real app, save to backend)
-          mockUsers.push(newUser)
+          users = [...users, newUser]
+          saveUsers(users)
 
           set({
             user: newUser,

@@ -286,26 +286,6 @@ export function AIRecommendations() {
             })}
           </div>
         )}
-
-        {/* CTA Section */}
-        <div className="text-center bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
-          <div className="max-w-2xl mx-auto">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">¿Quieres recomendaciones más precisas?</h3>
-            <p className="text-gray-600 mb-6">
-              Completa tu perfil de estilo y preferencias para recibir sugerencias aún más personalizadas de nuestra IA
-              especializada en moda.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3">
-                <Sparkles className="w-4 h-4 mr-2" />
-                Mejorar Recomendaciones
-              </Button>
-              <Button variant="outline" className="px-8 py-3 bg-transparent">
-                Ver Historial de IA
-              </Button>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   )
